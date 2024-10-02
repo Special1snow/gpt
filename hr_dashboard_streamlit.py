@@ -1,8 +1,14 @@
-
 import streamlit as st
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
+
+# Attempt to import seaborn and handle the case where it's not installed
+try:
+    import seaborn as sns
+    seaborn_imported = True
+except ImportError:
+    seaborn_imported = False
+    st.warning("Seaborn is not installed. Heatmap and other visualizations will be limited.")
 
 # Load the data
 file_path = 'AI를 활용한 HR솔루션 기능요건정의 (SKGC).xlsx'
@@ -31,9 +37,13 @@ if option == '직무별SkillSet':
     
     # Heatmap of skill proficiency across departments
     st.subheader('Skill Proficiency Heatmap')
-    plt.figure(figsize=(10,6))
-    sns.heatmap(df_skillset.iloc[:, 2:], annot=True, cmap="coolwarm", fmt=".1f")
-    st.pyplot(plt)
+    
+    if seaborn_imported:
+        plt.figure(figsize=(10,6))
+        sns.heatmap(df_skillset.iloc[:, 2:], annot=True, cmap="coolwarm", fmt=".1f")
+        st.pyplot(plt)
+    else:
+        st.error("Seaborn is required to display the heatmap. Please install Seaborn.")
 
 elif option == 'Self Review':
     st.header('Self Review')
